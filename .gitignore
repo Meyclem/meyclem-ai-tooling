@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+
+# Editor backups and swap files
+*~
+*.swp
+*.swo
+
+# IDE / editor configs (personal)
+.idea/
+.vscode/
+
+# Local environment / secrets
+.env
+.env.local
+
+# Claude Code.
+# The leading negations re-include `.claude/` against a global gitignore that
+# excludes it (a common `*.claude/` rule in ~/.gitignore); without them the
+# repo's own instructions silently never get committed.
+!.claude/
+!CLAUDE.md
+.claude/settings.local.json
+CLAUDE.local.md

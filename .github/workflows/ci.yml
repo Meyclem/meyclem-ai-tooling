@@ -1,0 +1,30 @@
+---
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
+
+      - name: Validate JSON manifests
+        run: |
+          python3 -m json.tool .claude-plugin/marketplace.json > /dev/null
+          find plugins -name plugin.json -print0 \
+            | xargs -0 -n1 python3 -m json.tool > /dev/null
+
+      # claude-plugin-validate is skipped: it shells out to the Claude Code
+      # CLI, which is not available on the runner. It stays covered locally by
+      # the pre-commit hook.
+      - uses: pre-commit/action@v3.0.1
+        env:
+          SKIP: claude-plugin-validate

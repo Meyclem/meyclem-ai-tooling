@@ -1,0 +1,18 @@
+{
+  "name": "meyclem-ai-tooling",
+  "description": "Meyclem's personal Claude Code plugins.",
+  "owner": {
+    "name": "Meyclem",
+    "url": "https://github.com/meyclem"
+  },
+  "metadata": {
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "echo",
+      "source": "./plugins/echo",
+      "description": "Echoes back what you pass it. Minimal plugin used to check the marketplace is wired up."
+    }
+  ]
+}

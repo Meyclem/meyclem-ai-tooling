@@ -1,0 +1,8 @@
+{
+  "name": "echo",
+  "description": "Echoes back what you pass it, verbatim.",
+  "author": {
+    "name": "Meyclem",
+    "url": "https://github.com/meyclem"
+  }
+}

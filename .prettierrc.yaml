@@ -1,0 +1,6 @@
+# Markdown prose is hard-wrapped at 80 columns.
+printWidth: 80
+proseWrap: always
+# Never reformat the contents of fenced code blocks: they are examples of
+# other tools' input, not code this repo owns.
+embeddedLanguageFormatting: "off"
