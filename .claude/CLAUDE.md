@@ -35,10 +35,13 @@ in `/plugin marketplace add` and the other after `@` when installing.
   validator and then fails at runtime.
 - **Everything in this repo is written in English** — specs, docs, plugin
   content, READMEs, comments. Consumers are global.
-- **Forbidden plugin component types**: `hooks/`, `bin/`, `.mcp.json`,
-  `.lsp.json`, `monitors/`. Allowed: `skills/`, `agents/`, `commands/`, plus
-  bundled files reached through `${CLAUDE_SKILL_DIR}` / `${CLAUDE_PLUGIN_ROOT}`.
-  See `docs/reference/quality-bar.md`.
+- **Every plugin component type is allowed** — `skills/`, `agents/`,
+  `commands/`, `hooks/`, `.mcp.json`, `.lsp.json`, `monitors/`, `bin/`,
+  `settings.json`. Nothing is banned by policy. A plugin that ships anything
+  acting beyond the session (hooks, bin, MCP, monitors, an `agent` default)
+  **must say so at the top of its own README**: what it runs, on which event,
+  what it touches. Disclosure is the rule, not permission. See
+  `docs/reference/quality-bar.md`.
 
 ## This repo is public
 

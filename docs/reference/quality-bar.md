@@ -2,30 +2,47 @@
 
 What a plugin must satisfy to be merged into this marketplace.
 
-## Allowed plugin components
+## Plugin components
 
-| Component        | Location                                                             | Notes                                                                                                   |
-| ---------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| Skill            | `skills/<name>/SKILL.md`                                             | Markdown with frontmatter (`name`, `description`). One directory per skill.                             |
-| Agent            | `agents/<name>.md`                                                   | Markdown with frontmatter (`name`, `description`, optional `model`, `tools`, etc.). One file per agent. |
-| Command          | `commands/<name>.md`                                                 | Flat markdown, the legacy form of skills. Prefer `skills/` for new content.                             |
-| Bundled scripts  | `skills/<name>/scripts/` (skill-local) or `scripts/` (plugin-shared) | Referenced through `${CLAUDE_SKILL_DIR}` or `${CLAUDE_PLUGIN_ROOT}`.                                    |
-| Persistent state | `${CLAUDE_PLUGIN_DATA}` (runtime, not in the repo)                   | For `node_modules`, venvs, caches that must survive plugin updates.                                     |
+Every component type Claude Code supports is allowed here. Nothing is banned by
+policy.
 
-## Forbidden components
+| Component           | Location                                           | Notes                                                                                                               |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Skill               | `skills/<name>/SKILL.md`                           | One directory per skill. A plugin shipping exactly one skill may put `SKILL.md` at the plugin root.                 |
+| Agent               | `agents/<name>.md`                                 | One file per agent.                                                                                                 |
+| Command             | `commands/<name>.md`                               | Flat markdown, the legacy form of skills. Prefer `skills/` for new content.                                         |
+| Hooks               | `hooks/hooks.json`                                 | Event handlers. Same schema as the `hooks` object in `settings.json`.                                               |
+| MCP servers         | `.mcp.json` (plugin root)                          | Server configurations, started when the plugin is enabled.                                                          |
+| LSP servers         | `.lsp.json` (plugin root)                          | Requires the language server binary on the user's machine.                                                          |
+| Background monitors | `monitors/monitors.json`                           | Long-running commands; each stdout line reaches Claude as a notification.                                           |
+| Executables         | `bin/`                                             | Added to the Bash tool's `PATH` while the plugin is enabled.                                                        |
+| Default settings    | `settings.json` (plugin root)                      | Only `agent` and `subagentStatusLine` are honored. `agent` activates one of the plugin's agents as the main thread. |
+| Bundled scripts     | `skills/<name>/scripts/` or `scripts/`             | Referenced through `${CLAUDE_SKILL_DIR}` or `${CLAUDE_PLUGIN_ROOT}`.                                                |
+| Persistent state    | `${CLAUDE_PLUGIN_DATA}` (runtime, not in the repo) | For `node_modules`, venvs, caches that must survive plugin updates.                                                 |
 
-| Component   | Why                                                                                   |
-| ----------- | ------------------------------------------------------------------------------------- |
-| `hooks/`    | Arbitrary code execution on tool events, without per-call confirmation from the user. |
-| `bin/`      | Adds executables to the user's `PATH` while the plugin is enabled. Too invasive.      |
-| `.mcp.json` | Opens outbound network connections to MCP servers.                                    |
-| `.lsp.json` | Language servers are a user-local concern, not a marketplace one.                     |
-| `monitors/` | Continuous background commands.                                                       |
+Only `plugin.json` belongs inside `.claude-plugin/`. Every other directory sits
+at the plugin root.
 
-These are the component types that act on a user's machine beyond the session
-they were invoked in. Installing a plugin from here should never be riskier than
-reading the markdown it ships. If you have a concrete case for one of them, open
-an issue and make the argument — the list is a default, not a dogma.
+## Components that act beyond the session
+
+Skills, agents, and commands are markdown: installing one is about as risky as
+reading it. These are not:
+
+- `hooks/` runs commands on tool events, without per-call confirmation.
+- `bin/` puts executables on the user's `PATH`.
+- `.mcp.json` opens outbound connections to MCP servers.
+- `monitors/` runs commands continuously in the background.
+- `settings.json` with `agent` set replaces the main thread's system prompt.
+
+They are allowed, and some things are only possible with them. The requirement
+is **disclosure, not permission**: a plugin shipping any of the above states so
+in its own `README.md`, in plain language, near the top — what it runs, on which
+event, and what it touches outside the session. A reader deciding whether to
+install must not have to open `hooks.json` to find out.
+
+This marketplace is public and anyone may install from it. Undisclosed side
+effects are the one thing that gets a plugin pulled.
 
 ## Manifest requirements
 

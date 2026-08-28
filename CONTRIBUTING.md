@@ -61,8 +61,10 @@ shorthand `./<plugin-name>` (relative to `metadata.pluginRoot`) passes the
 validator but is **not** honored at runtime — the install fails with
 `Source path does not exist`.
 
-[Quality bar](./docs/reference/quality-bar.md) lists what a plugin must satisfy,
-and which component types are not accepted.
+[Quality bar](./docs/reference/quality-bar.md) lists what a plugin must satisfy.
+Every component type is allowed — but anything that acts beyond the session
+(hooks, `bin/`, MCP servers, monitors) has to be disclosed in your plugin's
+README.
 
 ## Modifying an existing plugin
 
